@@ -1,0 +1,96 @@
+package com.rodrigvf.copiou_papelaria_api.service;
+
+import com.rodrigvf.copiou_papelaria_api.entity.Brand;
+import com.rodrigvf.copiou_papelaria_api.entity.Image;
+import com.rodrigvf.copiou_papelaria_api.entity.Product;
+import com.rodrigvf.copiou_papelaria_api.repository.BrandRepository;
+import com.rodrigvf.copiou_papelaria_api.repository.ProductRepository;
+import com.rodrigvf.copiou_papelaria_api.specification.ProductSpecification;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+public class ProductService {
+
+    private final ProductRepository repository;
+    private final BrandService brandService;
+    private final ImageService imageService;
+
+
+    public List<Product> findAll() {
+        return repository.findAll();
+    }
+
+    public Optional<Product> findById(Long id) {
+        return repository.findById(id);
+    }
+
+    public List<Product> findByParams(Long brand, Boolean isActive) {
+        Specification<Product> spec = Specification.where(null);
+
+        if (brand != null) {
+            spec = spec.and(ProductSpecification.hasBrand(brand));
+        }
+
+        if (isActive != null) {
+            spec = spec.and(ProductSpecification.isActive(isActive));
+        }
+
+        return repository.findAll(spec);
+    }
+
+    public Product save(Product product) {
+        product.setBrand(this.findBrand(product.getBrand()));
+        product.setImages(this.findImages(product.getImages()));
+        return repository.save(product);
+    }
+
+    public Optional<Product> update(Long productId, Product updateProduct) {
+        Optional<Product> optProduct = repository.findById(productId);
+        if (optProduct.isPresent()) {
+
+            Brand brand = this.findBrand(updateProduct.getBrand());
+            List<Image> images = this.findImages(updateProduct.getImages());
+
+            Product product = optProduct.get();
+            product.setName(updateProduct.getName());
+            product.setDescription(updateProduct.getDescription());
+            product.setBrand(brand);
+            product.setIsActive(updateProduct.getIsActive());
+            product.setImages(images);
+
+            repository.save(product);
+            return Optional.of(product);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<Product> changeStatus(Long productId, Boolean active) {
+        Optional<Product> optProduct = repository.findById(productId);
+        if (optProduct.isPresent()) {
+            Product product = optProduct.get();
+            product.setIsActive(active);
+
+            repository.save(product);
+            return Optional.of(product);
+        }
+        return Optional.empty();
+    }
+
+    private Brand findBrand(Brand brand) {
+        return brandService.findById(brand.getId()).orElse(null);
+    }
+
+    private List<Image> findImages(List<Image> images) {
+        List<Image> imagesFound = new ArrayList<>();
+        images.forEach(image -> imageService.findById(image.getId()).ifPresent(imagesFound::add));
+        return imagesFound;
+    }
+
+}
