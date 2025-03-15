@@ -10,10 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,6 +43,35 @@ public class ProductVariantService {
 
         return repository.findAll(spec);
     }
+
+    public List<Map<String, Object>> findListAllProducts() {
+        List<Product> products = productService.findAll(); // Busca todos os produtos
+        List<Map<String, Object>> responseList = new ArrayList<>();
+
+        for (Product product : products) {
+            List<ProductVariant> variants = repository.findProductVariantByProduct(product);
+
+            List<String> colors = variants.stream()
+                    .map(v -> v.getColor().getName())
+                    .distinct()
+                    .collect(Collectors.toList());
+
+            List<String> sizes = variants.stream()
+                    .map(v -> v.getSize().getName())
+                    .distinct()
+                    .collect(Collectors.toList());
+
+            Map<String, Object> productData = new HashMap<>();
+            productData.put("product", product);
+            productData.put("colors", colors);
+            productData.put("sizes", sizes);
+
+            responseList.add(productData);
+        }
+
+        return responseList;
+    }
+
 
     public Optional<Map<String, Object>> findListByProduct(Long productId) {
         return productService.findById(productId).map(product -> {

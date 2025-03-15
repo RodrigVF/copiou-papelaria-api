@@ -13,6 +13,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/product/variant")
@@ -56,6 +58,21 @@ public class ProductVariantController {
                     return ResponseEntity.ok(response);
                 })
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<ProductVariantListByProductResponse>> findListAllProducts() {
+        List<Map<String, Object>> allProducts = productVariantService.findListAllProducts();
+
+        if (allProducts != null && !allProducts.isEmpty()) {
+            List<ProductVariantListByProductResponse> responses = allProducts.stream()
+                    .map(ProductVariantMapper::toProductVariantListByProductResponse)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(responses);
+        }
+
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping
