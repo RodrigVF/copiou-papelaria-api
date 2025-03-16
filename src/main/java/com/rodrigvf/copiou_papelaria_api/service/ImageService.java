@@ -3,9 +3,10 @@ package com.rodrigvf.copiou_papelaria_api.service;
 import com.rodrigvf.copiou_papelaria_api.entity.Image;
 import com.rodrigvf.copiou_papelaria_api.repository.ImageRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -14,8 +15,8 @@ public class ImageService {
 
     private final ImageRepository imageRepository;
 
-    public List<Image> findAll() {
-        return imageRepository.findAll();
+    public Page<Image> findAll(Integer page, Integer limit) {
+        return imageRepository.findAll(PageRequest.of(page, limit));
     }
 
     public Optional<Image> findById(Long id) {

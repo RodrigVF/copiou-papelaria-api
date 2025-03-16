@@ -7,6 +7,8 @@ import com.rodrigvf.copiou_papelaria_api.repository.BrandRepository;
 import com.rodrigvf.copiou_papelaria_api.repository.ProductRepository;
 import com.rodrigvf.copiou_papelaria_api.specification.ProductSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +25,8 @@ public class ProductService {
     private final ImageService imageService;
 
 
-    public List<Product> findAll() {
-        return repository.findAll();
+    public Page<Product> findAll(Integer page, Integer limit) {
+        return repository.findAll(PageRequest.of(page, limit));
     }
 
     public Optional<Product> findById(Long id) {

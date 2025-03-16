@@ -1,12 +1,18 @@
 package com.rodrigvf.copiou_papelaria_api.controller;
 
 import com.rodrigvf.copiou_papelaria_api.dto.request.ProductRequest;
+import com.rodrigvf.copiou_papelaria_api.dto.response.ImageResponse;
+import com.rodrigvf.copiou_papelaria_api.dto.response.PageResponse;
 import com.rodrigvf.copiou_papelaria_api.dto.response.ProductResponse;
+import com.rodrigvf.copiou_papelaria_api.entity.Image;
 import com.rodrigvf.copiou_papelaria_api.entity.Product;
+import com.rodrigvf.copiou_papelaria_api.mapper.ImageMapper;
+import com.rodrigvf.copiou_papelaria_api.mapper.PageMapper;
 import com.rodrigvf.copiou_papelaria_api.mapper.ProductMapper;
 import com.rodrigvf.copiou_papelaria_api.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -21,11 +27,17 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public ResponseEntity<List<ProductResponse>> findAll() {
-        return ResponseEntity.ok(productService.findAll()
-                .stream()
-                .map(ProductMapper::toProductResponse)
-                .toList());
+    public ResponseEntity<PageResponse<ProductResponse>> findAll(
+            @RequestParam (defaultValue = "0", required = false)
+            Integer page,
+            @RequestParam (defaultValue = "10", required = false)
+            Integer limit
+    ) {
+        Page<Product> productPage = productService.findAll(page, limit);
+
+        PageResponse<ProductResponse> response = PageMapper.toPagedResponse(productPage, ProductMapper::toProductResponse);
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")

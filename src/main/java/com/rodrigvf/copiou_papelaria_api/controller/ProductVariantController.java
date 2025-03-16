@@ -1,13 +1,19 @@
 package com.rodrigvf.copiou_papelaria_api.controller;
 
 import com.rodrigvf.copiou_papelaria_api.dto.request.ProductVariantRequest;
+import com.rodrigvf.copiou_papelaria_api.dto.response.PageResponse;
+import com.rodrigvf.copiou_papelaria_api.dto.response.ProductResponse;
 import com.rodrigvf.copiou_papelaria_api.dto.response.ProductVariantListByProductResponse;
 import com.rodrigvf.copiou_papelaria_api.dto.response.ProductVariantResponse;
+import com.rodrigvf.copiou_papelaria_api.entity.Product;
 import com.rodrigvf.copiou_papelaria_api.entity.ProductVariant;
+import com.rodrigvf.copiou_papelaria_api.mapper.PageMapper;
+import com.rodrigvf.copiou_papelaria_api.mapper.ProductMapper;
 import com.rodrigvf.copiou_papelaria_api.mapper.ProductVariantMapper;
 import com.rodrigvf.copiou_papelaria_api.service.ProductVariantService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -61,15 +67,21 @@ public class ProductVariantController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<ProductVariantListByProductResponse>> findListAllProducts() {
-        List<Map<String, Object>> allProducts = productVariantService.findListAllProducts();
+    public ResponseEntity<PageResponse<ProductVariantListByProductResponse>> findListAllProducts(
+            @RequestParam (defaultValue = "0", required = false)
+            Integer page,
+            @RequestParam (defaultValue = "10", required = false)
+            Integer limit
+    ) {
+        Page<Map<String, Object>> allProducts = productVariantService.findListAllProducts(page, limit);
 
         if (allProducts != null && !allProducts.isEmpty()) {
             List<ProductVariantListByProductResponse> responses = allProducts.stream()
                     .map(ProductVariantMapper::toProductVariantListByProductResponse)
-                    .collect(Collectors.toList());
+                    .toList();
 
-            return ResponseEntity.ok(responses);
+            PageResponse<ProductVariantListByProductResponse> response = PageMapper.toPagedResponse(allProducts, ProductVariantMapper::toProductVariantListByProductResponse);
+            return ResponseEntity.ok(response);
         }
 
         return ResponseEntity.notFound().build();

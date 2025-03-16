@@ -15,7 +15,7 @@ CREATE TABLE product (
 
 CREATE TABLE image (
     image_id SERIAL PRIMARY KEY,
-    src VARCHAR(255) NOT NULL,
+    src TEXT NOT NULL,
     alt VARCHAR(255),
     is_thumbnail BOOLEAN NOT NULL DEFAULT FALSE,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,

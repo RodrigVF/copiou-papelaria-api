@@ -7,6 +7,9 @@ import com.rodrigvf.copiou_papelaria_api.entity.Size;
 import com.rodrigvf.copiou_papelaria_api.repository.ProductVariantRepository;
 import com.rodrigvf.copiou_papelaria_api.specification.ProductVariantSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -44,8 +47,9 @@ public class ProductVariantService {
         return repository.findAll(spec);
     }
 
-    public List<Map<String, Object>> findListAllProducts() {
-        List<Product> products = productService.findAll(); // Busca todos os produtos
+    public Page<Map<String, Object>> findListAllProducts(Integer page, Integer limit) {
+        Page<Product> products = productService.findAll(page, limit);
+
         List<Map<String, Object>> responseList = new ArrayList<>();
 
         for (Product product : products) {
@@ -69,7 +73,7 @@ public class ProductVariantService {
             responseList.add(productData);
         }
 
-        return responseList;
+        return new PageImpl<>(responseList, products.getPageable(), products.getTotalElements());
     }
 
 
