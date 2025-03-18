@@ -15,7 +15,7 @@ public class ImageService {
 
     private final ImageRepository imageRepository;
 
-    public Page<Image> findAll(Integer page, Integer limit) {
+    public Page<Image> findAll(Integer page, Integer limit, String sortBy, String sortDirection) {
         return imageRepository.findAll(PageRequest.of(page, limit));
     }
 

@@ -4,12 +4,15 @@ import com.rodrigvf.copiou_papelaria_api.entity.Color;
 import com.rodrigvf.copiou_papelaria_api.entity.Product;
 import com.rodrigvf.copiou_papelaria_api.entity.ProductVariant;
 import com.rodrigvf.copiou_papelaria_api.entity.Size;
+import com.rodrigvf.copiou_papelaria_api.repository.ProductRepository;
 import com.rodrigvf.copiou_papelaria_api.repository.ProductVariantRepository;
+import com.rodrigvf.copiou_papelaria_api.specification.ProductSpecification;
 import com.rodrigvf.copiou_papelaria_api.specification.ProductVariantSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -47,8 +50,8 @@ public class ProductVariantService {
         return repository.findAll(spec);
     }
 
-    public Page<Map<String, Object>> findListAllProducts(Integer page, Integer limit) {
-        Page<Product> products = productService.findAll(page, limit);
+    public Page<Map<String, Object>> findListAllProducts(Integer page, Integer limit, Long brand, Boolean isActive) {
+        Page<Product> products = productService.findByParams(page, limit, brand, isActive);
 
         List<Map<String, Object>> responseList = new ArrayList<>();
 

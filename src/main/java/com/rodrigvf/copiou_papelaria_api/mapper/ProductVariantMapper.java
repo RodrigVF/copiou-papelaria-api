@@ -24,6 +24,7 @@ public class ProductVariantMapper {
         Size size = Size.builder().id(request.sizeId()).build();
 
         return ProductVariant.builder()
+                .barcode(request.barcode())
                 .product(product)
                 .color(color)
                 .size(size)
@@ -40,6 +41,7 @@ public class ProductVariantMapper {
 
         return ProductVariantResponse.builder()
                 .id(productVariant.getId())
+                .barcode(productVariant.getBarcode())
                 .product(product)
                 .color(color)
                 .size(size)

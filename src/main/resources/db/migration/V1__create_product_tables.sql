@@ -8,6 +8,7 @@ CREATE TABLE product (
     name VARCHAR(100) NOT NULL,
     description TEXT,
     brand_id INT REFERENCES brand(brand_id) ON DELETE SET NULL,
+    price NUMERIC(10,2) NOT NULL,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     created_at timestamp,
     updated_at timestamp
@@ -35,6 +36,7 @@ CREATE TABLE size (
 
 CREATE TABLE product_variant (
     product_variant_id SERIAL PRIMARY KEY,
+    barcode BIGINT,
     product_id INT REFERENCES product(product_id) ON DELETE CASCADE,
     color_id INT REFERENCES color(color_id) ON DELETE SET NULL,
     size_id INT REFERENCES size(size_id) ON DELETE SET NULL,

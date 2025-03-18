@@ -2,13 +2,10 @@ package com.rodrigvf.copiou_papelaria_api.controller;
 
 import com.rodrigvf.copiou_papelaria_api.dto.request.ProductVariantRequest;
 import com.rodrigvf.copiou_papelaria_api.dto.response.PageResponse;
-import com.rodrigvf.copiou_papelaria_api.dto.response.ProductResponse;
 import com.rodrigvf.copiou_papelaria_api.dto.response.ProductVariantListByProductResponse;
 import com.rodrigvf.copiou_papelaria_api.dto.response.ProductVariantResponse;
-import com.rodrigvf.copiou_papelaria_api.entity.Product;
 import com.rodrigvf.copiou_papelaria_api.entity.ProductVariant;
 import com.rodrigvf.copiou_papelaria_api.mapper.PageMapper;
-import com.rodrigvf.copiou_papelaria_api.mapper.ProductMapper;
 import com.rodrigvf.copiou_papelaria_api.mapper.ProductVariantMapper;
 import com.rodrigvf.copiou_papelaria_api.service.ProductVariantService;
 import jakarta.validation.Valid;
@@ -20,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/product/variant")
@@ -68,12 +64,12 @@ public class ProductVariantController {
 
     @GetMapping("/list")
     public ResponseEntity<PageResponse<ProductVariantListByProductResponse>> findListAllProducts(
-            @RequestParam (defaultValue = "0", required = false)
-            Integer page,
-            @RequestParam (defaultValue = "10", required = false)
-            Integer limit
+            @RequestParam(defaultValue = "0", required = false) Integer page,
+            @RequestParam(defaultValue = "10", required = false) Integer limit,
+            @RequestParam(required = false) Long brand,
+            @RequestParam(required = false) Boolean active
     ) {
-        Page<Map<String, Object>> allProducts = productVariantService.findListAllProducts(page, limit);
+        Page<Map<String, Object>> allProducts = productVariantService.findListAllProducts(page, limit, brand, active);
 
         if (allProducts != null && !allProducts.isEmpty()) {
             List<ProductVariantListByProductResponse> responses = allProducts.stream()

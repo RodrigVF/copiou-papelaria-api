@@ -20,6 +20,8 @@ public class ProductVariant {
     @Column(name = "product_variant_id")
     private Long id;
 
+    private Long barcode;
+
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "product_id", foreignKey = @ForeignKey(name = "fk_product_variant_product"), nullable = true)
     private Product product;

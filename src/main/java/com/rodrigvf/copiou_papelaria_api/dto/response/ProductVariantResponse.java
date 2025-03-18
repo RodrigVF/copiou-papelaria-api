@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 @Builder
 public record ProductVariantResponse(
         Long id,
+        Long barcode,
         ProductResponse product,
         ColorResponse color,
         SizeResponse size,

@@ -26,6 +26,7 @@ public class ProductMapper {
                 .name(request.name())
                 .description(request.description())
                 .brand(brand)
+                .price(request.price())
                 .isActive(request.isActive())
                 .images(images)
                 .build();
@@ -45,6 +46,7 @@ public class ProductMapper {
                 .name(product.getName())
                 .description(product.getDescription())
                 .brand(brand)
+                .price(product.getPrice())
                 .isActive(product.getIsActive())
                 .createdAt(product.getCreatedAt())
                 .updatedAt(product.getUpdatedAt())

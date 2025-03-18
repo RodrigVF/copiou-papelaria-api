@@ -9,6 +9,7 @@ import com.rodrigvf.copiou_papelaria_api.specification.ProductSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +34,8 @@ public class ProductService {
         return repository.findById(id);
     }
 
-    public List<Product> findByParams(Long brand, Boolean isActive) {
+    public Page<Product> findByParams(Integer page, Integer limit, Long brand, Boolean isActive) {
+        Pageable pageable = PageRequest.of(page, limit);
         Specification<Product> spec = Specification.where(null);
 
         if (brand != null) {
@@ -44,7 +46,7 @@ public class ProductService {
             spec = spec.and(ProductSpecification.isActive(isActive));
         }
 
-        return repository.findAll(spec);
+        return repository.findAll(spec, pageable);
     }
 
     public Product save(Product product) {

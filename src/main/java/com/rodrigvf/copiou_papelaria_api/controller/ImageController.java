@@ -29,9 +29,13 @@ public class ImageController {
             @RequestParam (defaultValue = "0", required = false)
             Integer page,
             @RequestParam (defaultValue = "10", required = false)
-            Integer limit
+            Integer limit,
+            @RequestParam(defaultValue = "id", required = false)
+            String sortBy,
+            @RequestParam(defaultValue = "ASC", required = false)
+            String sortDirection
     ) {
-        Page<Image> imagePage = imageService.findAll(page, limit);
+        Page<Image> imagePage = imageService.findAll(page, limit, sortBy, sortDirection);
 
         PageResponse<ImageResponse> response = PageMapper.toPagedResponse(imagePage, ImageMapper::toImageResponse);
 

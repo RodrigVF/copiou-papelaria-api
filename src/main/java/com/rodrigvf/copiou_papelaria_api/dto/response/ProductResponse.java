@@ -4,6 +4,7 @@ import com.rodrigvf.copiou_papelaria_api.entity.Brand;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -13,6 +14,7 @@ public record ProductResponse (
         String name,
         String description,
         BrandResponse brand,
+        BigDecimal price,
         Boolean isActive,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,

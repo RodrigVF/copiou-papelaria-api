@@ -1,12 +1,9 @@
 package com.rodrigvf.copiou_papelaria_api.controller;
 
 import com.rodrigvf.copiou_papelaria_api.dto.request.ProductRequest;
-import com.rodrigvf.copiou_papelaria_api.dto.response.ImageResponse;
 import com.rodrigvf.copiou_papelaria_api.dto.response.PageResponse;
 import com.rodrigvf.copiou_papelaria_api.dto.response.ProductResponse;
-import com.rodrigvf.copiou_papelaria_api.entity.Image;
 import com.rodrigvf.copiou_papelaria_api.entity.Product;
-import com.rodrigvf.copiou_papelaria_api.mapper.ImageMapper;
 import com.rodrigvf.copiou_papelaria_api.mapper.PageMapper;
 import com.rodrigvf.copiou_papelaria_api.mapper.ProductMapper;
 import com.rodrigvf.copiou_papelaria_api.service.ProductService;
@@ -17,8 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/v1/product")
 @RequiredArgsConstructor
@@ -28,9 +23,9 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<PageResponse<ProductResponse>> findAll(
-            @RequestParam (defaultValue = "0", required = false)
+            @RequestParam(defaultValue = "0", required = false)
             Integer page,
-            @RequestParam (defaultValue = "10", required = false)
+            @RequestParam(defaultValue = "10", required = false)
             Integer limit
     ) {
         Page<Product> productPage = productService.findAll(page, limit);
@@ -48,15 +43,17 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<ProductResponse>> findByParams(
+    public ResponseEntity<PageResponse<ProductResponse>> findByParams(
+            @RequestParam(defaultValue = "0", required = false) Integer page,
+            @RequestParam(defaultValue = "10", required = false) Integer limit,
             @RequestParam(required = false) Long brand,
             @RequestParam(required = false) Boolean active
     ) {
-        List<Product> products = productService.findByParams(brand, active);
+        Page<Product> productPage = productService.findByParams(page, limit, brand, active);
 
-        return ResponseEntity.ok(products.stream()
-                .map(ProductMapper::toProductResponse)
-                .toList());
+        PageResponse<ProductResponse> response = PageMapper.toPagedResponse(productPage, ProductMapper::toProductResponse);
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
@@ -76,7 +73,7 @@ public class ProductController {
 
     @PatchMapping("/deactivate/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasAuthority('product:deactivate')")
-    public ResponseEntity<ProductResponse> inactivate(@PathVariable Long id){
+    public ResponseEntity<ProductResponse> inactivate(@PathVariable Long id) {
         return productService.changeStatus(id, false)
                 .map(product -> ResponseEntity.ok(ProductMapper.toProductResponse(product)))
                 .orElse(ResponseEntity.notFound().build());
@@ -84,7 +81,7 @@ public class ProductController {
 
     @PatchMapping("/activate/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasAuthority('product:activate')")
-    public ResponseEntity<ProductResponse> activate(@PathVariable Long id){
+    public ResponseEntity<ProductResponse> activate(@PathVariable Long id) {
         return productService.changeStatus(id, true)
                 .map(product -> ResponseEntity.ok(ProductMapper.toProductResponse(product)))
                 .orElse(ResponseEntity.notFound().build());

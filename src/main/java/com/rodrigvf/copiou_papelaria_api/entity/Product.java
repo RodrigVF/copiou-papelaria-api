@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -30,6 +31,9 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "brand_id", referencedColumnName = "brand_id", foreignKey = @ForeignKey(name = "fk_product_brand"), nullable = true)
     private Brand brand;
+
+    @Column(precision = 10, scale = 2, nullable = false)
+    private BigDecimal price;
 
     @Column(name = "is_active", nullable = false)
     private Boolean isActive;
