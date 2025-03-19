@@ -66,6 +66,7 @@ public class ProductService {
             product.setName(updateProduct.getName());
             product.setDescription(updateProduct.getDescription());
             product.setBrand(brand);
+            product.setPrice(updateProduct.getPrice());
             product.setIsActive(updateProduct.getIsActive());
             product.setImages(images);
 

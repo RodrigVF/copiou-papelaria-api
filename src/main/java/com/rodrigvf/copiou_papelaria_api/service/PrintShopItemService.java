@@ -56,6 +56,7 @@ public class PrintShopItemService {
             PrintShopItem printShopItem = optPrintShopItem.get();
             printShopItem.setName(updatePrintShopItem.getName());
             printShopItem.setDescription(updatePrintShopItem.getDescription());
+            printShopItem.setPrice(updatePrintShopItem.getPrice());
             printShopItem.setDuration(updatePrintShopItem.getDuration());
             printShopItem.setIsActive(updatePrintShopItem.getIsActive());
             printShopItem.setImages(images);
