@@ -30,6 +30,9 @@ public class Image {
     @Column(name = "is_thumbnail", nullable = false)
     private Boolean isThumbnail;
 
+    @Column(name = "is_banner", nullable = false)
+    private Boolean isBanner;
+
     @Column(name = "is_active", nullable = false)
     private Boolean isActive;
 

@@ -49,6 +49,25 @@ public class ImageController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<PageResponse<ImageResponse>> findByParam(
+            @RequestParam (defaultValue = "0", required = false)
+            Integer page,
+            @RequestParam (defaultValue = "10", required = false)
+            Integer limit,
+            @RequestParam(defaultValue = "id", required = false)
+            String sortBy,
+            @RequestParam(defaultValue = "ASC", required = false)
+            String sortDirection,
+            @RequestParam(required = false) Boolean banner
+    ) {
+        Page<Image> imagePage = imageService.findByParams(page, limit, sortBy, sortDirection, banner);
+
+        PageResponse<ImageResponse> response = PageMapper.toPagedResponse(imagePage, ImageMapper::toImageResponse);
+
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping
     @PreAuthorize("hasRole('ADMIN') or hasAuthority('image:create')")
     public ResponseEntity<ImageResponse> save(@Valid @RequestBody ImageRequest request) {

@@ -19,6 +19,7 @@ CREATE TABLE image (
     src TEXT NOT NULL,
     alt VARCHAR(255),
     is_thumbnail BOOLEAN NOT NULL DEFAULT FALSE,
+    is_banner BOOLEAN NOT NULL DEFAULT FALSE,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL

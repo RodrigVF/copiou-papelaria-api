@@ -10,6 +10,7 @@ public record ImageResponse(
         String src,
         String alt,
         Boolean isThumbnail,
+        Boolean isBanner,
         Boolean isActive,
         LocalDateTime createdAt,
         LocalDateTime updatedAt

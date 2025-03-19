@@ -13,6 +13,7 @@ public class ImageMapper {
                 .src(request.src())
                 .alt(request.alt())
                 .isThumbnail(request.isThumbnail())
+                .isBanner(request.isBanner())
                 .isActive(request.isActive())
                 .build();
     }
@@ -23,6 +24,7 @@ public class ImageMapper {
                 .src(image.getSrc())
                 .alt(image.getAlt())
                 .isThumbnail(image.getIsThumbnail())
+                .isBanner(image.getIsBanner())
                 .isActive(image.getIsActive())
                 .createdAt(image.getCreatedAt())
                 .updatedAt(image.getUpdatedAt())

@@ -4,6 +4,7 @@ public record ImageRequest(
         String src,
         String alt,
         Boolean isThumbnail,
+        Boolean isBanner,
         Boolean isActive
 ) {
 }
