@@ -61,6 +61,27 @@ public class ImageService {
         return repository.save(image);
     }
 
+    public Optional<Image> changeImageAttribute(Long imageId, Boolean active, String attribute) {
+        Optional<Image> optImage = repository.findById(imageId);
+        if (optImage.isPresent()) {
+            Image image = optImage.get();
+
+            if ("isThumbnail".equals(attribute)) {
+                image.setIsThumbnail(active);
+            } else if ("isBanner".equals(attribute)) {
+                image.setIsBanner(active);
+            } else if ("isActive".equals(attribute)) {
+                image.setIsActive(active);
+            }  else {
+                return Optional.empty();
+            }
+
+            repository.save(image);
+            return Optional.of(image);
+        }
+        return Optional.empty();
+    }
+
     public void delete(Long productImageId) {
         repository.deleteById(productImageId);
     }

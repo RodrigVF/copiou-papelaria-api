@@ -75,6 +75,32 @@ public class ImageController {
         return ResponseEntity.ok(ImageMapper.toImageResponse(savedImage));
     }
 
+    @PatchMapping("/activate/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('image:activate')")
+    public ResponseEntity<Image> activateAttribute(
+            @PathVariable Long id,
+            @RequestParam String attribute
+    ) {
+        Optional<Image> updatedImage = imageService.changeImageAttribute(id, true, attribute);
+
+        return updatedImage
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PatchMapping("/deactivate/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('image:deactivate')")
+    public ResponseEntity<Image> deactivateAttribute(
+            @PathVariable Long id,
+            @RequestParam String attribute
+    ) {
+        Optional<Image> updatedImage = imageService.changeImageAttribute(id, false, attribute);
+
+        return updatedImage
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasAuthority('image:delete')")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
