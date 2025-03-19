@@ -46,10 +46,14 @@ public class ProductController {
     public ResponseEntity<PageResponse<ProductResponse>> findByParams(
             @RequestParam(defaultValue = "0", required = false) Integer page,
             @RequestParam(defaultValue = "10", required = false) Integer limit,
+            @RequestParam(defaultValue = "id", required = false)
+            String sortBy,
+            @RequestParam(defaultValue = "ASC", required = false)
+            String sortDirection,
             @RequestParam(required = false) Long brand,
             @RequestParam(required = false) Boolean active
     ) {
-        Page<Product> productPage = productService.findByParams(page, limit, brand, active);
+        Page<Product> productPage = productService.findByParams(page, limit, sortBy, sortDirection, brand, active);
 
         PageResponse<ProductResponse> response = PageMapper.toPagedResponse(productPage, ProductMapper::toProductResponse);
 

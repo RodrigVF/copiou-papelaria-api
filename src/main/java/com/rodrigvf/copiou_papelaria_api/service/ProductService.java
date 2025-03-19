@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -34,8 +35,18 @@ public class ProductService {
         return repository.findById(id);
     }
 
-    public Page<Product> findByParams(Integer page, Integer limit, Long brand, Boolean isActive) {
-        Pageable pageable = PageRequest.of(page, limit);
+    public Page<Product> findByParams(Integer page, Integer limit, String sortBy, String sortDirection, Long brand, Boolean isActive) {
+        if (sortBy == null || sortBy.isEmpty()) {
+            sortBy = "id";
+        }
+
+        Sort sort = Sort.by(Sort.Order.asc(sortBy));
+        if ("DESC".equalsIgnoreCase(sortDirection)) {
+            sort = Sort.by(Sort.Order.desc(sortBy));
+        }
+
+        Pageable pageable = PageRequest.of(page, limit, sort);
+
         Specification<Product> spec = Specification.where(null);
 
         if (brand != null) {

@@ -50,8 +50,8 @@ public class ProductVariantService {
         return repository.findAll(spec);
     }
 
-    public Page<Map<String, Object>> findListAllProducts(Integer page, Integer limit, Long brand, Boolean isActive) {
-        Page<Product> products = productService.findByParams(page, limit, brand, isActive);
+    public Page<Map<String, Object>> findListAllProducts(Integer page, Integer limit, String sortBy, String sortDirection, Long brand, Boolean isActive) {
+        Page<Product> products = productService.findByParams(page, limit, sortBy, sortDirection, brand, isActive);
 
         List<Map<String, Object>> responseList = new ArrayList<>();
 

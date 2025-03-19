@@ -66,10 +66,14 @@ public class ProductVariantController {
     public ResponseEntity<PageResponse<ProductVariantListByProductResponse>> findListAllProducts(
             @RequestParam(defaultValue = "0", required = false) Integer page,
             @RequestParam(defaultValue = "10", required = false) Integer limit,
+            @RequestParam(defaultValue = "id", required = false)
+            String sortBy,
+            @RequestParam(defaultValue = "ASC", required = false)
+            String sortDirection,
             @RequestParam(required = false) Long brand,
             @RequestParam(required = false) Boolean active
     ) {
-        Page<Map<String, Object>> allProducts = productVariantService.findListAllProducts(page, limit, brand, active);
+        Page<Map<String, Object>> allProducts = productVariantService.findListAllProducts(page, limit, sortBy, sortDirection, brand, active);
 
         if (allProducts != null && !allProducts.isEmpty()) {
             List<ProductVariantListByProductResponse> responses = allProducts.stream()
