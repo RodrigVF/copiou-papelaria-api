@@ -50,10 +50,10 @@ public class ProductController {
             String sortBy,
             @RequestParam(defaultValue = "ASC", required = false)
             String sortDirection,
-            @RequestParam(required = false) Long brand,
-            @RequestParam(required = false) Boolean active
+            @RequestParam(required = false) Boolean active,
+            @RequestParam(required = false) Long brand
     ) {
-        Page<Product> productPage = productService.findByParams(page, limit, sortBy, sortDirection, brand, active);
+        Page<Product> productPage = productService.findByParams(page, limit, sortBy, sortDirection, active, brand);
 
         PageResponse<ProductResponse> response = PageMapper.toPagedResponse(productPage, ProductMapper::toProductResponse);
 

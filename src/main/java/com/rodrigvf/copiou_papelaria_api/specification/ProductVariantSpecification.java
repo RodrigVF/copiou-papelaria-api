@@ -8,19 +8,19 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class ProductVariantSpecification {
 
-    public static Specification<ProductVariant> hasProduct(Long productId) {
+    public static Specification<ProductVariant> isActive(Boolean active) {
         return (Root<ProductVariant> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) -> {
-            if (productId != null) {
-                return criteriaBuilder.equal(root.get("product").get("id"), productId);
+            if (active != null) {
+                return criteriaBuilder.equal(root.get("isActive"), active);
             }
             return null;
         };
     }
 
-    public static Specification<ProductVariant> isActive(Boolean active) {
+    public static Specification<ProductVariant> hasProduct(Long productId) {
         return (Root<ProductVariant> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) -> {
-            if (active != null) {
-                return criteriaBuilder.equal(root.get("isActive"), active);
+            if (productId != null) {
+                return criteriaBuilder.equal(root.get("product").get("id"), productId);
             }
             return null;
         };

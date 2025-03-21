@@ -70,10 +70,10 @@ public class ProductVariantController {
             String sortBy,
             @RequestParam(defaultValue = "ASC", required = false)
             String sortDirection,
-            @RequestParam(required = false) Long brand,
-            @RequestParam(required = false) Boolean active
+            @RequestParam(required = false) Boolean active,
+            @RequestParam(required = false) Long brand
     ) {
-        Page<Map<String, Object>> allProducts = productVariantService.findListAllProducts(page, limit, sortBy, sortDirection, brand, active);
+        Page<Map<String, Object>> allProducts = productVariantService.findListAllProducts(page, limit, sortBy, sortDirection, active, brand);
 
         if (allProducts != null && !allProducts.isEmpty()) {
             List<ProductVariantListByProductResponse> responses = allProducts.stream()

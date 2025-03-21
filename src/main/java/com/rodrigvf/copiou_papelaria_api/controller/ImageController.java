@@ -59,9 +59,10 @@ public class ImageController {
             String sortBy,
             @RequestParam(defaultValue = "ASC", required = false)
             String sortDirection,
+            @RequestParam(required = false) Boolean active,
             @RequestParam(required = false) Boolean banner
     ) {
-        Page<Image> imagePage = imageService.findByParams(page, limit, sortBy, sortDirection, banner);
+        Page<Image> imagePage = imageService.findByParams(page, limit, sortBy, sortDirection, active, banner);
 
         PageResponse<ImageResponse> response = PageMapper.toPagedResponse(imagePage, ImageMapper::toImageResponse);
 

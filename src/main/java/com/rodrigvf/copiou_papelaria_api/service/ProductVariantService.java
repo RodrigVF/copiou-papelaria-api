@@ -39,19 +39,19 @@ public class ProductVariantService {
     public List<ProductVariant> findByParams(Long product, Boolean isActive) {
         Specification<ProductVariant> spec = Specification.where(null);
 
-        if (product != null) {
-            spec = spec.and(ProductVariantSpecification.hasProduct(product));
-        }
-
         if (isActive != null) {
             spec = spec.and(ProductVariantSpecification.isActive(isActive));
+        }
+
+        if (product != null) {
+            spec = spec.and(ProductVariantSpecification.hasProduct(product));
         }
 
         return repository.findAll(spec);
     }
 
-    public Page<Map<String, Object>> findListAllProducts(Integer page, Integer limit, String sortBy, String sortDirection, Long brand, Boolean isActive) {
-        Page<Product> products = productService.findByParams(page, limit, sortBy, sortDirection, brand, isActive);
+    public Page<Map<String, Object>> findListAllProducts(Integer page, Integer limit, String sortBy, String sortDirection, Boolean isActive, Long brand) {
+        Page<Product> products = productService.findByParams(page, limit, sortBy, sortDirection, isActive, brand);
 
         List<Map<String, Object>> responseList = new ArrayList<>();
 

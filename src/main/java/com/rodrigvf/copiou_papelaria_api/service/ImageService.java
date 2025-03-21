@@ -36,7 +36,7 @@ public class ImageService {
         return repository.findById(id);
     }
 
-    public Page<Image> findByParams(Integer page, Integer limit, String sortBy, String sortDirection, Boolean isBanner) {
+    public Page<Image> findByParams(Integer page, Integer limit, String sortBy, String sortDirection, Boolean isActive, Boolean isBanner) {
         if (sortBy == null || sortBy.isEmpty()) {
             sortBy = "id";
         }
@@ -49,6 +49,10 @@ public class ImageService {
         Pageable pageable = PageRequest.of(page, limit, sort);
 
         Specification<Image> spec = Specification.where(null);
+
+        if (isActive != null) {
+            spec = spec.and(ImageSpecification.isActive(isActive));
+        }
 
         if (isBanner != null) {
             spec = spec.and(ImageSpecification.isBanner(isBanner));

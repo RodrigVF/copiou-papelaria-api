@@ -35,7 +35,7 @@ public class ProductService {
         return repository.findById(id);
     }
 
-    public Page<Product> findByParams(Integer page, Integer limit, String sortBy, String sortDirection, Long brand, Boolean isActive) {
+    public Page<Product> findByParams(Integer page, Integer limit, String sortBy, String sortDirection, Boolean isActive, Long brand) {
         if (sortBy == null || sortBy.isEmpty()) {
             sortBy = "id";
         }
@@ -49,12 +49,12 @@ public class ProductService {
 
         Specification<Product> spec = Specification.where(null);
 
-        if (brand != null) {
-            spec = spec.and(ProductSpecification.hasBrand(brand));
-        }
-
         if (isActive != null) {
             spec = spec.and(ProductSpecification.isActive(isActive));
+        }
+
+        if (brand != null) {
+            spec = spec.and(ProductSpecification.hasBrand(brand));
         }
 
         return repository.findAll(spec, pageable);
